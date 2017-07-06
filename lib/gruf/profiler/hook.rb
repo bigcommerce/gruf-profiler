@@ -15,39 +15,18 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 module Gruf
-  module CircuitBreaker
+  module Profiler
     class Hook < Gruf::Hooks::Base
-
-      ##
-      # Sets up the stoplight gem
-      #
       def setup
-        redis = options.fetch(:redis, nil)
-        Stoplight::Light.default_data_store = Stoplight::DataStore::Redis.new(redis) if redis && redis.is_a?(Redis)
+        require 'rbtrace'
+        require 'memory_profiler'
       end
 
-      ##
-      # Handle the gruf around hook
-      #
-      # @param [Symbol] call_signature
-      # @param [Object] request
-      # @param [GRPC::ActiveCall] active_call
-      #
-      def around(call_signature, request, active_call, &block)
-        light = Stoplight(method_key(call_signature)) {
-          block.call(call_signature, request, active_call)
-        }.with_cool_off_time(options.fetch(:cool_off_time, 60))
-         .with_error_handler do |error, handle|
-          if error.is_a?(GRPC::BadStatus)
-            # only special handling for GRPC error statuses. We want to pass-through any normal exceptions
-            raise error unless failure_statuses.include?(error.class)
-            handle.call(error)
-          else
-            raise error
-          end
+      def outer_around(call_signature, _request, _active_call, &block)
+        report = MemoryProfiler.report do
+          yield
         end
-        light.with_threshold(options.fetch(:threshold, 1)) if options.fetch(:threshold, false)
-        light.run
+        Gruf.logger.info "gruf profile for #{service_key}.#{method_key(call_signature)}:\n#{report.pretty_print}"
       end
 
       private
@@ -67,17 +46,10 @@ module Gruf
       end
 
       ##
-      # @return [Array<Class>]
-      #
-      def failure_statuses
-        options.fetch(:failure_statuses, [GRPC::Internal, GRPC::Unknown])
-      end
-
-      ##
       # @return [Hash]
       #
       def options
-        @options.fetch(:circuit_breaker, {})
+        @options.fetch(:profiler, {})
       end
     end
   end

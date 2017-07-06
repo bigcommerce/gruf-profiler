@@ -14,12 +14,11 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-require 'spec_helper'
+require_relative 'profiler/version'
+require_relative 'profiler/hook'
 
-describe Gruf::CircuitBreaker do
-  describe 'version' do
-    it 'should have a version' do
-      expect(Gruf::CircuitBreaker::VERSION).to be_a(String)
-    end
+module Gruf
+  module Profiler
+
   end
 end

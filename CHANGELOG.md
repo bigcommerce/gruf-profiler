@@ -1,13 +1,5 @@
-Changelog for the gruf-circuit-breaker gem.
+Changelog for the gruf-profiler gem.
 
-h3. 0.1.2
-
-- Updated to MIT license
-
-h3. 0.1.1
-
-- Fix to grpc error catching
-
-h3. 0.1.0
+h3. 0.0.1
 
 - Initial public release

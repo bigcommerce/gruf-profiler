@@ -17,7 +17,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'pry'
 require 'gruf'
-require 'gruf/circuit_breaker'
+require 'gruf/profiler'
 
 Dir["#{File.join(File.dirname(__FILE__), 'support')}/**/*.rb"].each {|f| require f }
 
@@ -31,6 +31,4 @@ RSpec.configure do |config|
     mocks.allow_message_expectations_on_nil = true
   end
   config.color = true
-
-  config.include Gruf::CircuitBreaker::SpecHelpers
 end

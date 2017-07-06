@@ -15,7 +15,7 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 module Gruf
-  module CircuitBreaker
-    VERSION = '0.1.2'.freeze
+  module Profiler
+    VERSION = '0.0.1'.freeze
   end
 end

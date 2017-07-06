@@ -1,44 +1,18 @@
-# gruf-circuit-breaker - Circuit Breaker for gruf
+# gruf-profiler - Profiler for gruf
 
-[![Build Status](https://travis-ci.com/bigcommerce/gruf-circuit-breaker.svg?token=D3Cc4LCF9BgpUx4dpPpv&branch=master)](https://travis-ci.com/bigcommerce/gruf-circuit-breaker)
-
-Adds circuit breaker support for [gruf](https://github.com/bigcommerce/gruf) 0.14.1 or later.
-
-This uses the wonderful [stoplight](https://github.com/orgsync/stoplight) gem for handling
-the internals of circuit breaking.
+Adds a profiler for [gruf](https://github.com/bigcommerce/gruf) 1.0.0 or later.
 
 ## Installation
 
 ```ruby
-gem 'gruf-circuit-breaker'
+gem 'gruf-profiler'
 ```
 
 Then in an initializer or before use, after loading gruf:
 
 ```ruby
-require 'gruf/circuit_breaker'
-Gruf::Hooks::Registry.add(:circuit_breaker, Gruf::CircuitBreaker::Hook)
-```
-
-## Configuration
-
-You can further customize the tracing of gruf services via the configuration:
-
-```ruby
-Gruf.configure do |c|
-  c.hook_options = {
-    circuit_breaker: {
-      # set cool-off time in seconds (defaults to 60)
-      cool_off_time: 15, 
-      # set threshold count to 2
-      threshold: 2, 
-      # set the gRPC failure statuses that will cause a circuit to trip 
-      failure_statuses: [GRPC::Internal, GRPC::Unknown, GRPC::Aborted],
-      # use a redis instance for the stoplight data storage
-      redis: Redis.new
-    }
-  }
-end
+require 'gruf/profiler'
+Gruf::Hooks::Registry.add(:profiler, Gruf::Profiler::Hook)
 ```
 
 ## License
