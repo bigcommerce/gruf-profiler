@@ -16,13 +16,25 @@
 #
 module Gruf
   module Profiler
+    ##
+    # Gruf hook that automatically loads rbtrace and memory profiler
+    #
+    # Add to your gruf initializer:
+    #   require 'gruf/profiler'
+    #   Gruf::Hooks::Registry.add(:profiler, Gruf::Profiler::Hook)
+    #
     class Hook < Gruf::Hooks::Base
+      ##
+      # Initializes the hook
+      #
       def setup
         require 'rbtrace'
         require 'memory_profiler'
       end
 
       ##
+      # Wraps the entire gruf call and provides memory reports
+      #
       # @param [Symbol] call_signature
       # @param [Object] _request
       # @param [GRPC::ActiveCall] _active_call
@@ -46,6 +58,7 @@ module Gruf
       private
 
       ##
+      # Log a message with a configurable level to the gruf logger
       # @param [String]
       #
       def log(msg)
@@ -54,6 +67,8 @@ module Gruf
       end
 
       ##
+      # Parse the method signature
+      #
       # @return [String]
       #
       def method_key(call_signature)
@@ -61,6 +76,8 @@ module Gruf
       end
 
       ##
+      # Determine a log-friendly service key name
+      #
       # @return [String]
       #
       def service_key
@@ -68,6 +85,8 @@ module Gruf
       end
 
       ##
+      # Get profiler options
+      #
       # @return [Hash]
       #
       def options
@@ -75,6 +94,8 @@ module Gruf
       end
 
       ##
+      # Get sub-options for the memory profiler
+      #
       # @return [Hash]
       #
       def memory_profiler_options
