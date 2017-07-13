@@ -1,6 +1,6 @@
 # gruf-profiler - Profiler for gruf
 
-[![Build Status](https://travis-ci.com/bigcommerce/gruf-profiler.svg?token=D3Cc4LCF9BgpUx4dpPpv&branch=master)](https://travis-ci.com/bigcommerce/gruf-profiler)
+[![Build Status](https://travis-ci.org/bigcommerce/gruf-profiler.svg?branch=master)](https://travis-ci.org/bigcommerce/gruf-profiler) [![Inline docs](http://inch-ci.org/github/bigcommerce/gruf-profiler.svg?branch=master)](http://inch-ci.org/github/bigcommerce/gruf-profiler)
 
 Adds a profiler for [gruf](https://github.com/bigcommerce/gruf) 1.0.0 or later.
 
