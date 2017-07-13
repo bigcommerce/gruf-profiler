@@ -28,6 +28,14 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 source 'https://rubygems.org'
 
-gem 'gruf'
+gem 'gruf', '~> 1.1'
+gem 'memory_profiler'
+gem 'rbtrace'
+
+group :development do
+  gem 'bundler-audit'
+  gem 'rubocop', '~> 0.49.1'
+  gem 'simplecov', require: false
+end
 
 gemspec

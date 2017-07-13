@@ -14,23 +14,19 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'pry'
-require 'gruf'
-require 'gruf/profiler'
+class ThingRequest; end
+class ThingService; end
 
-Dir["#{File.join(File.dirname(__FILE__), 'support')}/**/*.rb"].each {|f| require f }
+module Gruf
+  module Profiler
+    module SpecHelpers
+      def grpc_active_call(metadata: {}, output_metadata: {})
+        double(:active_call, metadata: metadata, output_metadata: output_metadata)
+      end
 
-RSpec.configure do |config|
-  config.alias_example_to :fit, focus: true
-  config.filter_run focus: true
-  config.filter_run_excluding broken: true
-  config.run_all_when_everything_filtered = true
-  config.expose_current_running_example_as :example
-  config.mock_with :rspec do |mocks|
-    mocks.allow_message_expectations_on_nil = true
+      def grpc_request
+        ThingRequest.new
+      end
+    end
   end
-  config.color = true
-
-  config.include Gruf::Profiler::SpecHelpers
 end

@@ -14,23 +14,41 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'pry'
-require 'gruf'
-require 'gruf/profiler'
+require 'spec_helper'
+require 'pp'
 
-Dir["#{File.join(File.dirname(__FILE__), 'support')}/**/*.rb"].each {|f| require f }
-
-RSpec.configure do |config|
-  config.alias_example_to :fit, focus: true
-  config.filter_run focus: true
-  config.filter_run_excluding broken: true
-  config.run_all_when_everything_filtered = true
-  config.expose_current_running_example_as :example
-  config.mock_with :rspec do |mocks|
-    mocks.allow_message_expectations_on_nil = true
+class NullPrettyPrint < PP
+  def pp_object(_)
   end
-  config.color = true
+end
 
-  config.include Gruf::Profiler::SpecHelpers
+describe Gruf::Profiler::Hook do
+  let(:service) { ThingService.new }
+  let(:log_level) { :debug }
+  let(:memory_profiler_options) { { pretty_print_options: { io: NullPrettyPrint.new } } }
+  let(:options) { { log_level: log_level, memory_profiler: memory_profiler_options } }
+  let(:signature) { 'get_thing' }
+  let(:request) { grpc_request }
+  let(:active_call) { grpc_active_call }
+  let(:report) { double(:pretty_print)}
+  let(:hook) { described_class.new(service, { profiler: options }) }
+
+  before do
+    hook.setup
+  end
+
+  describe '.outer_around' do
+    let(:result) { rand(1..1000) }
+    subject { hook.outer_around(signature, request, active_call) { result } }
+
+    before do
+      allow(MemoryProfiler).to receive(:report).and_return(report)
+    end
+
+    it 'should generate the report and log it' do
+      expect(MemoryProfiler).to receive(:report).once.and_call_original
+      expect(Gruf.logger).to receive(log_level.to_sym).once
+      expect(subject).to eq result
+    end
+  end
 end

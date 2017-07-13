@@ -19,6 +19,5 @@ require_relative 'profiler/hook'
 
 module Gruf
   module Profiler
-
   end
 end

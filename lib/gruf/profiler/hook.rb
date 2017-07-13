@@ -22,14 +22,36 @@ module Gruf
         require 'memory_profiler'
       end
 
-      def outer_around(call_signature, _request, _active_call, &block)
-        report = MemoryProfiler.report do
-          yield
+      ##
+      # @param [Symbol] call_signature
+      # @param [Object] _request
+      # @param [GRPC::ActiveCall] _active_call
+      #
+      def outer_around(call_signature, _request, _active_call, &_block)
+        result = nil
+        report = MemoryProfiler.report(memory_profiler_options) do
+          result = yield
         end
-        Gruf.logger.info "gruf profile for #{service_key}.#{method_key(call_signature)}:\n#{report.pretty_print}"
+        if report
+          pp_options = memory_profiler_options.fetch(:pretty_print_options, {})
+          io_obj = pp_options.fetch(:io, nil)
+          report_string = io_obj ? report.pretty_print(io_obj, pp_options) : report.pretty_print(pp_options)
+          log("gruf profile for #{service_key}.#{method_key(call_signature)}:\n#{report_string}")
+        else
+          log('Memory profiler did not return a report')
+        end
+        result
       end
 
       private
+
+      ##
+      # @param [String]
+      #
+      def log(msg)
+        level = options.fetch(:log_level, :debug).to_sym
+        Gruf.logger.send(level, msg)
+      end
 
       ##
       # @return [String]
@@ -42,7 +64,7 @@ module Gruf
       # @return [String]
       #
       def service_key
-        service.class.name.underscore.gsub('/','.')
+        service.class.name.underscore.tr('/', '.')
       end
 
       ##
@@ -51,7 +73,13 @@ module Gruf
       def options
         @options.fetch(:profiler, {})
       end
+
+      ##
+      # @return [Hash]
+      #
+      def memory_profiler_options
+        options.fetch(:memory_profiler, top: 50)
+      end
     end
   end
 end
-

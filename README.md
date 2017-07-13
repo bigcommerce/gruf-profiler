@@ -17,6 +17,40 @@ require 'gruf/profiler'
 Gruf::Hooks::Registry.add(:profiler, Gruf::Profiler::Hook)
 ```
 
+## Usage
+
+gruf-profiler includes and requires the [rbtrace](https://github.com/tmm1/rbtrace/) 
+and [memory_profiler](https://github.com/SamSaffron/memory_profiler) gems by default.
+ 
+### rbtrace
+
+rbtrace is automatically loaded for every gruf service. You can view the 
+[README](https://github.com/tmm1/rbtrace/blob/master/README.md) for rbtrace for more information,
+but the general idea is that you can run against a running gruf instance to see tracing 
+information about a gruf server:
+
+```bash
+rbtrace -p <PID_OF_GRUF> --firehose
+```
+
+Other options for the rbtrace binary are detailed in the rbtrace documentation.
+
+### Memory Profiler
+
+[Memory Profiler](https://github.com/SamSaffron/memory_profiler) is a gem that allows you to get
+a memory usage report of a block of Ruby code. gruf-profiler automatically wraps gruf service
+requests with this and provides a report to the logger (at a default level of DEBUG).
+
+You can adjust that log level to say, INFO, like so:
+
+```ruby
+Gruf.configure do |c|
+  c.hook_options[:profiler] = {
+    log_level: :info
+  }
+end
+```
+
 ## License
 
 Copyright (c) 2017-present, BigCommerce Pty. Ltd. All rights reserved 
