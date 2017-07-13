@@ -18,6 +18,9 @@ require_relative 'profiler/version'
 require_relative 'profiler/hook'
 
 module Gruf
+  ##
+  # Initialization class for the profiler
+  #
   module Profiler
   end
 end
