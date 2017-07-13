@@ -24,8 +24,9 @@ Gem::Specification.new do |spec|
   spec.email         = ['shaun.mccormick@bigcommerce.com']
 
   spec.summary       = %q{Plugin for profiling gruf-backed gRPC requests}
-  spec.description   = spec.summary
+  spec.description   = %q{Adds memory reporting and rbtrace to gruf servers}
   spec.homepage      = 'https://github.com/bigcommerce/gruf-profiler'
+  spec.license       = 'MIT'
 
   spec.files         = Dir['README.md', 'CHANGELOG.md', 'CODE_OF_CONDUCT.md', 'lib/**/*', 'gruf-profiler.gemspec']
   spec.require_paths = ['lib']
@@ -33,9 +34,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.6'
-  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'pry', '~> 0'
 
-  spec.add_runtime_dependency 'stackprof'
-  spec.add_runtime_dependency 'rbtrace'
-  spec.add_runtime_dependency 'memory_profiler'
+  spec.add_runtime_dependency 'stackprof', '~> 0'
+  spec.add_runtime_dependency 'rbtrace', '~> 0'
+  spec.add_runtime_dependency 'memory_profiler', '~> 0.9'
 end
