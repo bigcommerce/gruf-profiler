@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) 2017-present, BigCommerce Pty. Ltd. All rights reserved
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -14,6 +13,9 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
+require 'rbtrace'
+require 'memory_profiler'
+
 module Gruf
   module Profiler
     ##
@@ -21,34 +23,21 @@ module Gruf
     #
     # Add to your gruf initializer:
     #   require 'gruf/profiler'
-    #   Gruf::Hooks::Registry.add(:profiler, Gruf::Profiler::Hook)
+    #   Gruf.configure do |c|
+    #     c.interceptors[Gruf::Profiler::Interceptor] = {}
+    #   end
     #
-    class Hook < Gruf::Hooks::Base
-      ##
-      # Initializes the hook
-      #
-      def setup
-        require 'rbtrace'
-        require 'memory_profiler'
-      end
-
+    class Interceptor < Gruf::Interceptors::ServerInterceptor
       ##
       # Wraps the entire gruf call and provides memory reports
       #
-      # @param [Symbol] call_signature
-      # @param [Object] _request
-      # @param [GRPC::ActiveCall] _active_call
-      #
-      def outer_around(call_signature, _request, _active_call, &_block)
+      def call
         result = nil
         report = MemoryProfiler.report(memory_profiler_options) do
           result = yield
         end
         if report
-          pp_options = memory_profiler_options.fetch(:pretty_print_options, {})
-          io_obj = pp_options.fetch(:io, nil)
-          report_string = io_obj ? report.pretty_print(io_obj, pp_options) : report.pretty_print(pp_options)
-          log("gruf profile for #{service_key}.#{method_key(call_signature)}:\n#{report_string}")
+          profile(report)
         else
           log('Memory profiler did not return a report')
         end
@@ -56,6 +45,17 @@ module Gruf
       end
 
       private
+
+      ##
+      # Profile the given report to logs
+      #
+      # @param [MemoryProfiler::Reporter] report
+      #
+      def profile(report)
+        io_obj = pretty_print_options.fetch(:io, nil)
+        report_string = io_obj ? report.pretty_print(io_obj, pretty_print_options) : report.pretty_print(pretty_print_options)
+        log("gruf profile for #{request.method_name}:\n#{report_string}")
+      end
 
       ##
       # Log a message with a configurable level to the gruf logger
@@ -67,39 +67,21 @@ module Gruf
       end
 
       ##
-      # Parse the method signature
-      #
-      # @return [String]
-      #
-      def method_key(call_signature)
-        "#{service_key}.#{call_signature.to_s.gsub('_without_intercept', '')}"
-      end
-
-      ##
-      # Determine a log-friendly service key name
-      #
-      # @return [String]
-      #
-      def service_key
-        service.class.name.underscore.tr('/', '.')
-      end
-
-      ##
-      # Get profiler options
-      #
-      # @return [Hash]
-      #
-      def options
-        @options.fetch(:profiler, {})
-      end
-
-      ##
       # Get sub-options for the memory profiler
       #
       # @return [Hash]
       #
       def memory_profiler_options
         options.fetch(:memory_profiler, top: 50)
+      end
+
+      ##
+      # Get sub-options for pretty printing
+      #
+      # @return [Hash]
+      #
+      def pretty_print_options
+        memory_profiler_options.fetch(:pretty_print_options, {})
       end
     end
   end

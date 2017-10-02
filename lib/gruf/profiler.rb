@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) 2017-present, BigCommerce Pty. Ltd. All rights reserved
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -15,8 +14,11 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 require_relative 'profiler/version'
-require_relative 'profiler/hook'
+require_relative 'profiler/interceptor'
 
+##
+# Base gruf module
+#
 module Gruf
   ##
   # Initialization class for the profiler

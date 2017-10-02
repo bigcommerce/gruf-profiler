@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/bigcommerce/gruf-profiler.svg?branch=master)](https://travis-ci.org/bigcommerce/gruf-profiler) [![Gem Version](https://badge.fury.io/rb/gruf-profiler.svg)](https://badge.fury.io/rb/gruf-profiler) [![Inline docs](http://inch-ci.org/github/bigcommerce/gruf-profiler.svg?branch=master)](http://inch-ci.org/github/bigcommerce/gruf-profiler)
 
-Adds a profiler for [gruf](https://github.com/bigcommerce/gruf) 1.0.0 or later.
+Adds a profiler interceptor for [gruf](https://github.com/bigcommerce/gruf) 2.0.0 or later.
 
 ## Installation
 
@@ -14,7 +14,10 @@ Then in an initializer or before use, after loading gruf:
 
 ```ruby
 require 'gruf/profiler'
-Gruf::Hooks::Registry.add(:profiler, Gruf::Profiler::Hook)
+
+Gruf.configure do |c|
+  c.interceptors[Gruf::Profiler::Interceptor] = {}
+end
 ```
 
 ## Usage
@@ -45,7 +48,7 @@ You can adjust that log level to say, INFO, like so:
 
 ```ruby
 Gruf.configure do |c|
-  c.hook_options[:profiler] = {
+  c.interceptors[Gruf::Profiler::Interceptor] = {
     log_level: :info
   }
 end
