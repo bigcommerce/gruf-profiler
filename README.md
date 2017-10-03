@@ -16,7 +16,7 @@ Then in an initializer or before use, after loading gruf:
 require 'gruf/profiler'
 
 Gruf.configure do |c|
-  c.interceptors[Gruf::Profiler::Interceptor] = {}
+  c.interceptors.use(Gruf::Profiler::Interceptor)
 end
 ```
 
@@ -48,9 +48,7 @@ You can adjust that log level to say, INFO, like so:
 
 ```ruby
 Gruf.configure do |c|
-  c.interceptors[Gruf::Profiler::Interceptor] = {
-    log_level: :info
-  }
+  c.interceptors.use(Gruf::Profiler::Interceptor, log_level: :info)
 end
 ```
 
