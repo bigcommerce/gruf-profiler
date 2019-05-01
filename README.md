@@ -1,6 +1,6 @@
 # gruf-profiler - Profiler for gruf
 
-[![Build Status](https://travis-ci.org/bigcommerce/gruf-profiler.svg?branch=master)](https://travis-ci.org/bigcommerce/gruf-profiler) [![Gem Version](https://badge.fury.io/rb/gruf-profiler.svg)](https://badge.fury.io/rb/gruf-profiler) [![Inline docs](http://inch-ci.org/github/bigcommerce/gruf-profiler.svg?branch=master)](http://inch-ci.org/github/bigcommerce/gruf-profiler)
+[![CircleCI](https://circleci.com/gh/bigcommerce/gruf-profiler/tree/master.svg?style=svg)](https://circleci.com/gh/bigcommerce/gruf-profiler/tree/master) [![Gem Version](https://badge.fury.io/rb/gruf-profiler.svg)](https://badge.fury.io/rb/gruf-profiler) [![Inline docs](http://inch-ci.org/github/bigcommerce/gruf-profiler.svg?branch=master)](http://inch-ci.org/github/bigcommerce/gruf-profiler)
 
 Adds a profiler interceptor for [gruf](https://github.com/bigcommerce/gruf) 2.0.0 or later.
 
