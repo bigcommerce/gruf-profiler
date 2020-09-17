@@ -1,6 +1,6 @@
 # gruf-profiler - Profiler for gruf
 
-[![CircleCI](https://circleci.com/gh/bigcommerce/gruf-profiler/tree/master.svg?style=svg)](https://circleci.com/gh/bigcommerce/gruf-profiler/tree/master) [![Gem Version](https://badge.fury.io/rb/gruf-profiler.svg)](https://badge.fury.io/rb/gruf-profiler) [![Inline docs](http://inch-ci.org/github/bigcommerce/gruf-profiler.svg?branch=master)](http://inch-ci.org/github/bigcommerce/gruf-profiler)
+[![CircleCI](https://circleci.com/gh/bigcommerce/gruf-profiler/tree/main.svg?style=svg)](https://circleci.com/gh/bigcommerce/gruf-profiler/tree/main) [![Gem Version](https://badge.fury.io/rb/gruf-profiler.svg)](https://badge.fury.io/rb/gruf-profiler) [![Inline docs](http://inch-ci.org/github/bigcommerce/gruf-profiler.svg?branch=main)](http://inch-ci.org/github/bigcommerce/gruf-profiler)
 
 Adds a profiler interceptor for [gruf](https://github.com/bigcommerce/gruf) 2.0.0 or later.
 
@@ -28,7 +28,7 @@ and [memory_profiler](https://github.com/SamSaffron/memory_profiler) gems by def
 ### rbtrace
 
 rbtrace is automatically loaded for every gruf service. You can view the 
-[README](https://github.com/tmm1/rbtrace/blob/master/README.md) for rbtrace for more information,
+[README](https://github.com/tmm1/rbtrace/blob/main/README.md) for rbtrace for more information,
 but the general idea is that you can run against a running gruf instance to see tracing 
 information about a gruf server:
 
