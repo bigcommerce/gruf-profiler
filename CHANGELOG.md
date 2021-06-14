@@ -2,6 +2,8 @@ Changelog for the gruf-profiler gem.
 
 ### Unreleased Version
 
+### 1.1.0
+
 - Add support for Ruby 3
 - Loosen unnecessarily strict development dependencies
 - Add bundler 2 support
