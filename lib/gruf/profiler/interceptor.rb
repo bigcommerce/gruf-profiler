@@ -26,7 +26,7 @@ module Gruf
     # Add to your gruf initializer:
     #   require 'gruf/profiler'
     #   Gruf.configure do |c|
-    #     c.interceptors[Gruf::Profiler::Interceptor] = {}
+    #     c.interceptors.use(Gruf::Profiler::Interceptor)
     #   end
     #
     class Interceptor < Gruf::Interceptors::ServerInterceptor
@@ -35,7 +35,7 @@ module Gruf
       #
       def call
         result = nil
-        report = MemoryProfiler.report(memory_profiler_options) do
+        report = MemoryProfiler.report(**memory_profiler_options) do
           result = yield
         end
         if report
@@ -55,7 +55,7 @@ module Gruf
       #
       def profile(report)
         io_obj = pretty_print_options.fetch(:io, nil)
-        report_string = io_obj ? report.pretty_print(io_obj, pretty_print_options) : report.pretty_print(pretty_print_options)
+        report_string = io_obj ? report.pretty_print(io_obj, **pretty_print_options) : report.pretty_print(**pretty_print_options)
         log("gruf profile for #{request.method_name}:\n#{report_string}")
       end
 
@@ -83,7 +83,7 @@ module Gruf
       # @return [Hash]
       #
       def pretty_print_options
-        memory_profiler_options.fetch(:pretty_print_options, {})
+        memory_profiler_options.fetch(:pretty_print_options, {}) || {}
       end
     end
   end
